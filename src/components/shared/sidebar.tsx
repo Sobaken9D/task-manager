@@ -1,66 +1,148 @@
-// 130px -> 360px
-// box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.25);
-
-import {CalendarDays, ListTodo, Menu, Settings} from "lucide-react";
-import React from "react";
 import {cn} from "@/lib/utils.ts";
+import {CalendarDays, ListTodo, Menu, Settings} from "lucide-react";
 import {MenuLink} from "@/components/shared/todo/menu-link.tsx";
-import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
-import {setActiveId} from "@/store/features/categorySlice.ts";
+import {useState} from "react";
+
+import avatarImage from "@/assets/avatar.png";
+
+// import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
+// import {setActiveId} from "@/store/features/categorySlice.ts";
+// const dispatch = useAppDispatch();
+// const categoryActiveId = useAppSelector((state) => state.category.activeId);
+//
+// const handleCategoryClick = (id: number) => {
+//   dispatch(setActiveId(id));
+// }
+
 
 interface Props {
   className?: string;
 }
 
 export const Sidebar = ({className}: Props) => {
-  const dispatch = useAppDispatch();
-  const categoryActiveId = useAppSelector((state) => state.category.activeId);
+  const [isOpen, setIsOpen] = useState(false);
+  const name = "Jane Doe";
+  const email = "janedoe@gmail.com";
 
-  const handleCategoryClick = (id: number) => {
-    dispatch(setActiveId(id));
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
   }
 
   return (
-    <div className={cn('flex flex-col justify-start items-center w-[130px] shadow-[0_4px_10px_0_rgba(0,0,0,0.25)] bg-sidebar-bg', className)}>
-      <MenuLink
-        className="mt-[40px]"
-        isActive={false}
+    <div
+      className={cn('flex flex-col justify-start items-center shadow-[0_4px_10px_0_rgba(0,0,0,0.25)] bg-sidebar-bg',
+        "transition-all duration-300 ease-in-out overflow-hidden",
+        isOpen ? "w-[360px]" : "w-[130px]",
+        className
+      )}
+    >
+      <div
+        className={cn("transition-all duration-300 ease-in-out", // Плавное смещение контейнера кнопки меню
+          isOpen && "w-full justify-start ml-[48px]"
+        )}
       >
-        <Menu
-          size={48}
-          strokeWidth={2.2}
-        />
-      </MenuLink>
-      <hr className="h-[2px] w-[104px] mt-[35px] border-t border-gray-300" />
+        <button
+          onClick={() => toggleSidebar()}
+          className={cn("flex w-[48px] h-[48px] shrink-0 justify-center items-center rounded-[12px] transition cursor-pointer mt-[40px]",
+          )}
+        >
+          <Menu
+            size={isOpen ? 32 : 48}
+            strokeWidth={isOpen ? 3.2 : 2.2}
+            className="transition-all duration-300 ease-in-out"
+          />
+        </button>
+      </div>
+
+      <div
+        className={cn(
+          "flex flex-col justify-center items-center transition-all duration-300 ease-in-out overflow-hidden",
+          isOpen
+            ? "mt-[28px] opacity-100 max-h-[300px]"
+            : "mt-0 opacity-0 max-h-0 pointer-events-none"
+        )}
+      >
+        <div className="flex justify-center items-center rounded-[50%]">
+          <img
+            src={avatarImage}
+            alt="avatar"
+          />
+        </div>
+        <p className="text-[24px] font-bold mt-[28px] whitespace-nowrap">
+          {name}
+        </p>
+        <p className="text-[20px] text-text-gray whitespace-nowrap">
+          {email}
+        </p>
+      </div>
+
+      <hr
+        className={cn("h-[2px] w-[104px] mt-[35px] border-t border-gray-300 transition-all duration-300 ease-in-out",
+          isOpen ? "w-[290px]" : "w-[104px]"
+        )}
+      />
+
       <MenuLink
-        className="mt-[35px]"
-        isActive={categoryActiveId === 0}
-        onClick={() => handleCategoryClick(0)}
+        to="/todo"
+        className={cn("mt-[35px] transition-all duration-300 ease-in-out",
+          isOpen && "flex justify-start gap-[44px] w-[290px] pl-[21px]"
+        )}
       >
         <ListTodo
-          size={48}
-          strokeWidth={2.2}
+          size={isOpen ? 32 : 48}
+          strokeWidth={isOpen ? 3.2 : 2.2}
+          className="transition-all duration-300 ease-in-out shrink-0"
         />
+        <span
+          className={cn(
+            "text-[24px] font-bold whitespace-nowrap transition-opacity duration-300",
+            isOpen ? "opacity-100 delay-100" : "opacity-0 pointer-events-none w-0"
+          )}
+        >
+          My tasks
+        </span>
       </MenuLink>
+
       <MenuLink
-        className="mt-[24px]"
-        isActive={categoryActiveId === 1}
-        onClick={() => handleCategoryClick(1)}
+        to="/calendar"
+        className={cn("mt-[24px] transition-all duration-300 ease-in-out",
+          isOpen && "flex justify-start gap-[44px] w-[290px] pl-[21px]"
+        )}
       >
         <CalendarDays
-          size={48}
-          strokeWidth={2.2}
+          size={isOpen ? 32 : 48}
+          strokeWidth={isOpen ? 3.2 : 2.2}
+          className="transition-all duration-300 ease-in-out shrink-0"
         />
+        <span
+          className={cn(
+            "text-[24px] font-bold whitespace-nowrap transition-opacity duration-300",
+            isOpen ? "opacity-100 delay-100" : "opacity-0 pointer-events-none w-0"
+          )}
+        >
+          Calendar
+        </span>
       </MenuLink>
+
       <MenuLink
-        className="mt-[24px]"
-        isActive={categoryActiveId === 2}
-        onClick={() => handleCategoryClick(2)}
+        to="/settings"
+        className={cn("mt-[24px] transition-all duration-300 ease-in-out",
+          isOpen && "flex justify-start gap-[44px] w-[290px] pl-[21px]"
+        )}
       >
         <Settings
-          size={48}
-          strokeWidth={2.2}
+          size={isOpen ? 32 : 48}
+          strokeWidth={isOpen ? 3.2 : 2.2}
+          className="transition-all duration-300 ease-in-out shrink-0"
         />
+        <span
+          className={cn(
+            "text-[24px] font-bold whitespace-nowrap transition-opacity duration-300",
+            isOpen ? "opacity-100 delay-100" : "opacity-0 pointer-events-none w-0"
+          )}
+        >
+          Settings
+        </span>
       </MenuLink>
     </div>
   );

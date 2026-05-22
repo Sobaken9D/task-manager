@@ -10,7 +10,7 @@ interface Props {
 export const Footer = ({className}: Props) => {
   return (
     <div className={cn('', className)}>
-      <p className="text-[20px] text-[#6a7282] text-center">© 2025</p>
+      <p className="text-[20px] text-[#6a7282] text-center my-[40px]">© 2025</p>
     </div>
   );
 }

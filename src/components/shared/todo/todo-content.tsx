@@ -3,7 +3,8 @@ import {Title} from "@/components/shared/title.tsx";
 import {InputTask} from "@/components/shared/todo/input-task.tsx";
 import {AddTaskButton} from "@/components/shared/todo/add-task-button.tsx";
 
-import selfieImage from "@/assets/selfie.png";
+import {TasksList} from "@/components/shared/todo/tasks-list.tsx";
+import {TasksFilters} from "@/components/shared/todo/tasks-filters.tsx";
 
 interface Props {
   className?: string;
@@ -18,21 +19,15 @@ export const TodoContent = ({className}: Props) => {
         className={"font-bold mt-[80px]"}
       />
 
-      <div className="flex gap-[30px] justify-between">
+      <div className="flex gap-[30px] w-full justify-between">
         <InputTask placeholder="Type your task here.." />
         <AddTaskButton text='+ Add' />
       </div>
 
-      <div className="flex relative w-full h-[500px]">
-        <img
-          className="absolute top-0 left-[-190px]"
-          src={selfieImage as string}
-          alt="selfie"
-        />
-        <p className="absolute top-[50%] translate-y-[-50%] right-0 text-[24px] italic">
-          Empty as my motivation on Monday <span className="not-italic">😅</span>. <br />
-          Let’s start adding stuff!
-        </p>
+      {/*<TasksPlaceholder/>*/}
+      <div className="w-full">
+        <TasksFilters />
+        <TasksList />
       </div>
     </div>
   );
