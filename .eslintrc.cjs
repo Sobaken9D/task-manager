@@ -22,6 +22,7 @@ module.exports = {
     ],
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
+    'no-var': 'warn',
   },
   settings: {
     react: {

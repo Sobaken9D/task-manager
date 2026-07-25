@@ -2,9 +2,15 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "es2023",
-    "lib": ["ES2023", "DOM"],
+    "lib": [
+      "ES2023",
+      "DOM"
+    ],
     "module": "esnext",
-    "types": ["vite/client"],
+    "types": [
+      "vite/client",
+      "node"
+    ],
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -17,7 +23,18 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/prisma/*": [
+        "./prisma/*"
+      ],
+      "@/generated/*": [
+        "./generated/*"
+      ],
+      "@/shared/*": [
+        "./shared/*"
+      ]
     },
 
     /* Linting */
@@ -28,5 +45,8 @@
 
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src"]
+  "include": [
+    "src/**/*",
+    "shared/**/*"
+  ]
 }

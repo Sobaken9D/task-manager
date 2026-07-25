@@ -1,6 +1,6 @@
 import React from 'react';
-import {cn} from "@/lib/utils.ts";
-import {Container} from "@/components/shared/container.tsx";
+import {cn} from "@/lib/utils/cn.ts";
+
 
 interface Props {
   className?: string;

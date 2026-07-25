@@ -1,8 +1,9 @@
-import {cn} from "@/lib/utils.ts";
+import {Moon} from "lucide-react";
 import {Container} from "@/components/shared/container.tsx";
+import {cn} from "@/lib/utils/cn.ts";
 import {TodoContent} from "@/components/shared/todo/todo-content.tsx";
 import {Footer} from "@/components/shared/footer.tsx";
-import {Moon} from "lucide-react";
+import {ThemeToggler} from "@/components/shared/theme-toggler.tsx";
 
 interface Props {
   className?: string;
@@ -15,9 +16,8 @@ export const MainContent = ({className}: Props) => {
         <TodoContent/>
         <Footer/>
       </Container>
-      <button className="absolute right-[50px] top-[43px] cursor-pointer">
-        <Moon strokeWidth={"2px"} size={"48px"}/>
-      </button>
+
+      <ThemeToggler className="absolute right-[50px] top-[43px]"/>
     </div>
   );
 }

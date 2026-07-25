@@ -1,4 +1,4 @@
-import {cn} from "@/lib/utils.ts";
+import {cn} from "@/lib/utils/cn.ts";
 
 import selfieImage from "@/assets/selfie.png";
 

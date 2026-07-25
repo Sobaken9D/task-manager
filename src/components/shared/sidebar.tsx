@@ -1,19 +1,9 @@
-import {cn} from "@/lib/utils.ts";
+
 import {CalendarDays, ListTodo, Menu, Settings} from "lucide-react";
-import {MenuLink} from "@/components/shared/todo/menu-link.tsx";
 import {useState} from "react";
-
 import avatarImage from "@/assets/avatar.png";
-
-// import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
-// import {setActiveId} from "@/store/features/categorySlice.ts";
-// const dispatch = useAppDispatch();
-// const categoryActiveId = useAppSelector((state) => state.category.activeId);
-//
-// const handleCategoryClick = (id: number) => {
-//   dispatch(setActiveId(id));
-// }
-
+import {cn} from "@/lib/utils/cn.ts";
+import {MenuLink} from "@/components/shared/menu/menu-link.tsx";
 
 interface Props {
   className?: string;
@@ -21,12 +11,43 @@ interface Props {
 
 export const Sidebar = ({className}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const sessions = false;
   const name = "Jane Doe";
   const email = "janedoe@gmail.com";
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   }
+
+  // if (!sessions) {
+  //   return (
+  //     <div
+  //       className={cn('flex flex-col justify-start items-center shadow-[0_4px_10px_0_rgba(0,0,0,0.25)] bg-sidebar-bg',
+  //         "transition-all duration-300 ease-in-out overflow-hidden",
+  //         isOpen ? "w-[360px]" : "w-[130px]",
+  //         className
+  //       )}
+  //     >
+  //       <div
+  //         className={cn("transition-all duration-300 ease-in-out", // Плавное смещение контейнера кнопки меню
+  //           isOpen && "w-full justify-start ml-[48px]"
+  //         )}
+  //       >
+  //         <button
+  //           onClick={() => toggleSidebar()}
+  //           className={cn("flex w-[48px] h-[48px] shrink-0 justify-center items-center rounded-[12px] transition cursor-pointer mt-[40px]",
+  //           )}
+  //         >
+  //           <Menu
+  //             size={isOpen ? 32 : 48}
+  //             strokeWidth={isOpen ? 3.2 : 2.2}
+  //             className="transition-all duration-300 ease-in-out"
+  //           />
+  //         </button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div

@@ -16,4 +16,14 @@ export default defineConfig({
     tailwindcss(),
     tsconfigPaths(),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      }
+    }
+  }
 })
+
+// создается proxy server, который перенаправляет любой запрос (который начинается с /api) с фронта http://localhost:5173 на бек http://localhost:3000

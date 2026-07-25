@@ -1,4 +1,5 @@
-import {cn} from "@/lib/utils.ts";
+import {cn} from "@/lib/utils/cn.ts";
+
 
 interface Props {
   className?: string;

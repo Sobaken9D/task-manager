@@ -1,6 +1,6 @@
 import React from "react";
-import {cn} from "@/lib/utils.ts";
 import {NavLink} from "react-router-dom";
+import {cn} from "@/lib/utils/cn.ts";
 
 interface Props {
   to?: string;

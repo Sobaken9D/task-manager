@@ -4,8 +4,17 @@
   --bg-page:  #f3f4f6;
   --text: #333;
   --sidebar: #fff;
-  --cal: yellow
+  --gray: #6A7282;
+  --cal: yellow;
+
+  /* кнопка дефолт */
+  --button-primary: #000;
+  --button-primary-text: #fff;
+  /* кнопка удаление */
+  --button-destructive: #dc2626;      /* Красный цвет для удаления */
+  --button-destructive-text: #ffffff;/* Текст на красной кнопке */
 }
+
 
 @theme {
   --font-sans: "Lato", sans-serif;
@@ -13,6 +22,31 @@
 
   --color-link-bg: var(--bg-page);
   --color-sidebar-bg: var(--sidebar);
+
+  --color-inactive-filter: var(--gray);
+  --color-active-filter: var(--text);
+
+  --color-text-black: var(--text);
+  --color-text-gray: var(--gray);
+
+  /* Регистрируем новые классы кнопок в Tailwind v4 */
+  /* tailwind сгенерирует bg-btn-primary text-btn-primary border-btn-primary */
+  --color-btn-primary: var(--button-primary);
+  --color-btn-primary-text: var(--button-primary-text);
+  --color-btn-destructive: var(--button-destructive);
+  --color-btn-destructive-text: var(--button-destructive-text);
+
+  --spacing-xl-btn-w: 140px;
+  --spacing-xl-btn-h: 60px;
+}
+
+/* Стили top-loader */
+#nprogress .bar {
+  background: #333 !important; /* Ваш цвет (например, Tailwind blue-600) */
+  height: 5px !important;        /* Толщина полосы */
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px #333, 0 0 5px #333 !important; /* Свечение */
 }
 
 body {

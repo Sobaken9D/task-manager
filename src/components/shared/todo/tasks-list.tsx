@@ -1,25 +1,33 @@
-import {cn} from "@/lib/utils.ts";
+import {useAppSelector} from "@/store/hooks.ts";
+import {cn} from "@/lib/utils/cn.ts";
 import {Task} from "@/components/shared/todo/task.tsx";
-import {useEffect} from "react";
-import {Api} from "@/services/api-client.ts";
 
 interface Props {
   className?: string;
 }
 
 export const TasksList = ({className}: Props) => {
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await Api.todo.getTodo();
-      console.log(data);
-    }
-    loadData();
-  }, []);
+  // уже сделали fetch при переходе
+  const {items, loading} = useAppSelector(state => state.todo);
+
+  if (loading) {
+    return (
+      <div className="text-center text-[30px]">Loading tasks...</div>
+    );
+  }
 
   return (
     <div className={cn("flex flex-col mt-[23px] gap-[30px]", className)}>
-      <Task text="Learn React" isCompleted={false}/>
-      <Task text="Prototyping To-Do List" isCompleted={true}/>
+      {
+        items.map((task) => (
+          <Task
+            key={task.id}
+            text={task.description}
+            isCompleted={task.isCompleted}
+            taskId={task.id}
+          />
+        ))
+      }
     </div>
   );
 }

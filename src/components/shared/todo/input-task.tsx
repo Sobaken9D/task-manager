@@ -1,6 +1,6 @@
 import React from 'react';
-import {cn} from "@/lib/utils.ts";
-import {Input} from "@/components/ui/input.tsx";
+import {cn} from "@/lib/utils/cn.ts";
+import {Input} from "@/components/ui";
 
 // ComponentProps - возвращает пропсы компонента
 // typeof Input - возвращает слепок функции, что-то типа (props: { className?: string; type?: string; placeholder?: string; }) => React.JSX.Element

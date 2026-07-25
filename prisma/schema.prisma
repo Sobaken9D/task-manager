@@ -1,0 +1,153 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id @default(uuid())
+
+  email    String  @unique
+  password String?
+
+  name  String?
+  image String?
+
+  role UserRole @default(USER)
+
+  isVerified         Boolean @default(false) @map("is_verified")
+  isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
+
+  method AuthMetod
+
+  accounts Account[]
+
+  settings UserSettings?
+
+  passwordHistory PasswordHistory[]
+
+  todos Todo[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+// Хранит информацию о способах аутентификации пользователя
+model Account {
+  id String @id @default(uuid())
+
+  type              String // ("oauth" | "credentials" | ...)
+  provider          String // ("google" | "github" | ...)
+  providerAccountId String @map("provider_account_id")
+
+  refreshToken String? @map("refresh_token")
+  accessToken  String? @map("access_token")
+
+  expiresAt Int? @map("expires_at")
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("accounts")
+}
+
+model Token {
+  id String @id @default(uuid())
+
+  email     String
+  token     String    @unique
+  type      TokenType
+  expiresIn DateTime  @map("expires_in")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("tokens")
+}
+
+model UserSettings {
+  id String @id @default(uuid())
+
+  theme Theme @default(DARK)
+
+  language Language @default(ENGLISH)
+
+  emailNotifications Boolean @default(true) @map("email_notifications")
+
+  userId String @unique @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user_settings")
+}
+
+model PasswordHistory {
+  id String @id @default(uuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  hash String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("password_history")
+}
+
+model Todo {
+  id String @id @default(uuid())
+
+  description String
+  isCompleted Boolean
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("todos")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum AuthMetod {
+  CREDENTIALS
+  GOOGLE
+  GITHUB
+}
+
+enum TokenType {
+  VERIFICATION
+  TWO_FACTOR
+  PASSWORD_RESET
+}
+
+// Prisma создает свои строковые enum, отличные от typescript enum
+enum Theme {
+  LIGHT
+  DARK
+}
+
+enum Language {
+  ENGLISH
+  RUSSIAN
+}
