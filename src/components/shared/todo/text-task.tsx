@@ -9,7 +9,7 @@ interface Props {
 
 export const TextTask = ({className, text, isCompleted}: Props) => {
   return (
-    <div className={cn("flex-1 ml-[30px]", isCompleted && "text-inactive-filter line-through", className)}>
+    <div className={cn("flex-1", isCompleted && "text-inactive-filter line-through", className)}>
       {text}
     </div>
   );

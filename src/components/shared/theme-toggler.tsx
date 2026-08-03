@@ -3,6 +3,7 @@ import {setTheme} from "@/store/features/uiSlice";
 import {updateSettings} from "@/store/features/profileSlice";
 import {Moon, Sun} from "lucide-react";
 import {cn} from "@/lib/utils/cn.ts";
+import {checkAuth} from "@/store/features/authSlice.ts";
 
 interface Props {
   className?: string;
@@ -11,13 +12,14 @@ interface Props {
 export const ThemeToggler = ({className}: Props) => {
     const dispatch = useAppDispatch();
     const currentTheme = useAppSelector((state) => state.ui.theme);
-    const isAuthorized = useAppSelector((state) => !!state.auth.user);
+    const isAuthorized = useAppSelector((state) => state.auth.isCheckedSession);
 
     const toggleTheme = async () => {
       try {
         const nextTheme = currentTheme === "DARK" ? "LIGHT" : "DARK";
-
         dispatch(setTheme(nextTheme));
+
+        await dispatch(checkAuth());
 
         if(isAuthorized) {
           await dispatch(updateSettings({

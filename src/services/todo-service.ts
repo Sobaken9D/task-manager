@@ -1,9 +1,10 @@
 import type {
-  ResponseTodoWithMessageDto,
-  TodoDto
+  ResponseGetTodosWithMessageDto,
+  ResponseTodoWithMessageDto
 } from "@/services/dto/todo-dto.ts";
 import {AbstractService} from "@/services/abstract-service.ts";
 import {axiosInstance} from "@/services/axios-instance.ts";
+import type {UpdateTodoDto} from "../../server/src/services/dto/todo-dto.ts";
 
 class TodoService extends AbstractService{
   constructor() {
@@ -16,10 +17,10 @@ class TodoService extends AbstractService{
   // 3)для защиты от ошибок
 
   // Получение всех задач пользователя
-  public async getTodo(): Promise<TodoDto[]> {
+  public async getTodo(): Promise<ResponseGetTodosWithMessageDto> {
     try {
       // без axios пришлось бы использовать fetch, прописывать method, headers и тд.
-      const {data}: {data: TodoDto[]} = await axiosInstance.get<TodoDto[]>(this.url);
+      const {data} = await axiosInstance.get<ResponseGetTodosWithMessageDto>(this.url);
       return data;
     } catch (error) {
       throw this.handleError(error, 'GET_TODO');
@@ -29,7 +30,7 @@ class TodoService extends AbstractService{
   // Удаление задачи пользователя по id
   public async deleteTodo(id: string): Promise<ResponseTodoWithMessageDto> {
     try {
-      const {data}: {data: ResponseTodoWithMessageDto} = await axiosInstance.delete<ResponseTodoWithMessageDto>(`${this.url}/${id}`);
+      const {data} = await axiosInstance.delete<ResponseTodoWithMessageDto>(`${this.url}/${id}`);
       return data;
     } catch (error) {
       throw this.handleError(error, 'DELETE_TODO');
@@ -39,7 +40,7 @@ class TodoService extends AbstractService{
   // Добавление задачи
   public async addTodo(description: string): Promise<ResponseTodoWithMessageDto> {
     try {
-      const {data}: {data: ResponseTodoWithMessageDto} = await axiosInstance.post<ResponseTodoWithMessageDto>(this.url, {description});
+      const {data} = await axiosInstance.post<ResponseTodoWithMessageDto>(this.url, {description});
       return data;
     } catch (error) {
       throw this.handleError(error, 'ADD_TODO');
@@ -47,9 +48,9 @@ class TodoService extends AbstractService{
   }
 
   // Обновление задачи (редактирование описания или статуса задачи)
-  public async updateTodo({id, description}: TodoDto): Promise<ResponseTodoWithMessageDto> {
+  public async updateTodo({ dto, id }: { dto: UpdateTodoDto; id: string }): Promise<ResponseTodoWithMessageDto> {
     try {
-      const {data}: {data: ResponseTodoWithMessageDto} = await axiosInstance.patch<ResponseTodoWithMessageDto>(`${this.url}/${id}`, {description});
+      const {data} = await axiosInstance.patch<ResponseTodoWithMessageDto>(`${this.url}/${id}`, {dto});
       return data;
     } catch (error) {
       throw this.handleError(error, 'UPDATE_TODO');

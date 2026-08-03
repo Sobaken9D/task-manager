@@ -5,6 +5,7 @@ import {
 import {Api} from "@/services/api-client.ts";
 import type {TodoDto} from "@/services/dto/todo-dto.ts";
 import {getRejectValue} from "@/lib/utils/reject-value.ts";
+import type {UpdateTodoDto} from "../../../server/src/services/dto/todo-dto.ts";
 
 
 interface TodoState {
@@ -64,7 +65,7 @@ export const deleteTodo = createAsyncThunk(
  * Асинхронный экшен для добавления todo.
  * При ошибке возвращает ошибку через rejectWithValue.
  * @param description - Описание добавляймой задачи.
- * @returns Промис с сообщением и данными todo с при успешном выполнении.
+ * @returns Промис с сообщением и данными createdTodo с при успешном выполнении.
  */
 export const addTodo = createAsyncThunk(
   'todo/addTodo',
@@ -73,6 +74,24 @@ export const addTodo = createAsyncThunk(
       return await Api.todo.addTodo(description);
     } catch (error) {
       return rejectWithValue(getRejectValue(error, 'addTodo'));
+    }
+  }
+);
+
+/**
+ * Асинхронный экшен для обновления todo.
+ * При ошибке возвращает ошибку через rejectWithValue.
+ * @param dto - объект с данными которые нужно обновить.
+ *
+ * @returns Промис с сообщением и данными updatedTodo с при успешном выполнении.
+ */
+export const updateTodo = createAsyncThunk(
+  'todo/updateTodo',
+  async ({dto, id}: { dto: UpdateTodoDto; id: string }, {rejectWithValue}) => {
+    try {
+      return await Api.todo.updateTodo({dto, id});
+    } catch (error) {
+      return rejectWithValue(getRejectValue(error, 'updateTodo'));
     }
   }
 );
@@ -92,7 +111,7 @@ export const todoSlice = createSlice({
       .addCase(fetchTodo.fulfilled, (state, action) => {
         state.loading = false;
 
-        state.items = action.payload;
+        state.items = action.payload.data;
       })
       .addCase(fetchTodo.rejected, (state, action) => {
         state.loading = false;
@@ -127,6 +146,27 @@ export const todoSlice = createSlice({
         }
       })
       .addCase(addTodo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // ОБНОВЛЕНИЕ
+      .addCase(updateTodo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTodo.fulfilled, (state, action) => {
+        state.loading = false;
+
+        if (action.payload.data) {
+          const updatedItem = action.payload.data;
+          const updatedId = updatedItem.id;
+
+          // тут из-за Immer можно было мутировать сам объект, не используя map
+          state.items = state.items.map((item) => item.id === updatedId ? updatedItem : item);
+        }
+      })
+      .addCase(updateTodo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

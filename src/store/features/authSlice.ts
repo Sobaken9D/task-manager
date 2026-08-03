@@ -5,7 +5,7 @@ import {
 import {Api} from "@/services/api-client.ts";
 import type {ConfirmationDto} from "@/services/dto/auth-dto.ts";
 import {getRejectValue} from "@/lib/utils/reject-value.ts";
-import type {User} from "@/generated/prisma/client.ts";
+// import type {User} from "@/generated/prisma/client.ts";
 import type {
   TFormForgotPasswordValues, TFormLoginValues,
   TFormRegisterValues, TFormResetPasswordValues
@@ -20,14 +20,16 @@ interface AuthState {
   loading: boolean;
   error: AuthError | null;
   isCheckedSession: boolean; // проверил ли сервер сессию при старте приложения
-  user: User | null;
+  isAuthenticated: boolean;
+  // user: User | null;
 }
 
 const initialState: AuthState = {
   loading: false,
   error: null,
   isCheckedSession: false,
-  user: null,
+  isAuthenticated: false,
+  // user: null,
 };
 
 // createAsyncThunk — это функция из библиотеки Redux Toolkit,
@@ -176,13 +178,15 @@ export const authSlice = createSlice({
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.data;
+        // state.user = action.payload.data;
         state.isCheckedSession = true;
+        state.isAuthenticated = true;
       })
       .addCase(checkAuth.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as AuthError;
         state.isCheckedSession = true;
+        state.isAuthenticated = false;
       })
 
       // ПОДТВЕРЖДЕНИЕ ПОЧТЫ
@@ -192,13 +196,15 @@ export const authSlice = createSlice({
       })
       .addCase(verifyEmail.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.data.user;
+        // state.user = action.payload.data.user;
         state.isCheckedSession = true;
+        state.isAuthenticated = true;
       })
       .addCase(verifyEmail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as AuthError;
         state.isCheckedSession = true;
+        state.isAuthenticated = false;
       })
 
       // РЕГИСТРАЦИЯ
@@ -221,13 +227,15 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.data;
+        // state.user = action.payload.data;
         state.isCheckedSession = true;
+        state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as AuthError;
         state.isCheckedSession = true;
+        state.isAuthenticated = false;
       })
 
       // ВЫХОД
@@ -237,7 +245,7 @@ export const authSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.loading = false;
-        state.user = null;
+        state.isAuthenticated = false;
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;

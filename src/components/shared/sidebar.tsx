@@ -4,6 +4,7 @@ import {useState} from "react";
 import avatarImage from "@/assets/avatar.png";
 import {cn} from "@/lib/utils/cn.ts";
 import {MenuLink} from "@/components/shared/menu/menu-link.tsx";
+import {PATHS} from "@/constants/paths.ts";
 
 interface Props {
   className?: string;
@@ -11,7 +12,6 @@ interface Props {
 
 export const Sidebar = ({className}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const sessions = false;
   const name = "Jane Doe";
   const email = "janedoe@gmail.com";
 
@@ -124,29 +124,29 @@ export const Sidebar = ({className}: Props) => {
         </span>
       </MenuLink>
 
-      <MenuLink
-        to="/calendar"
-        className={cn("mt-[24px] transition-all duration-300 ease-in-out",
-          isOpen && "flex justify-start gap-[44px] w-[290px] pl-[21px]"
-        )}
-      >
-        <CalendarDays
-          size={isOpen ? 32 : 48}
-          strokeWidth={isOpen ? 3.2 : 2.2}
-          className="transition-all duration-300 ease-in-out shrink-0"
-        />
-        <span
-          className={cn(
-            "text-[24px] font-bold whitespace-nowrap transition-opacity duration-300",
-            isOpen ? "opacity-100 delay-100" : "opacity-0 pointer-events-none w-0"
-          )}
-        >
-          Calendar
-        </span>
-      </MenuLink>
+      {/*<MenuLink*/}
+      {/*  to="/calendar"*/}
+      {/*  className={cn("mt-[24px] transition-all duration-300 ease-in-out",*/}
+      {/*    isOpen && "flex justify-start gap-[44px] w-[290px] pl-[21px]"*/}
+      {/*  )}*/}
+      {/*>*/}
+      {/*  <CalendarDays*/}
+      {/*    size={isOpen ? 32 : 48}*/}
+      {/*    strokeWidth={isOpen ? 3.2 : 2.2}*/}
+      {/*    className="transition-all duration-300 ease-in-out shrink-0"*/}
+      {/*  />*/}
+      {/*  <span*/}
+      {/*    className={cn(*/}
+      {/*      "text-[24px] font-bold whitespace-nowrap transition-opacity duration-300",*/}
+      {/*      isOpen ? "opacity-100 delay-100" : "opacity-0 pointer-events-none w-0"*/}
+      {/*    )}*/}
+      {/*  >*/}
+      {/*    Calendar*/}
+      {/*  </span>*/}
+      {/*</MenuLink>*/}
 
       <MenuLink
-        to="/settings"
+        to={PATHS.SETTINGS}
         className={cn("mt-[24px] transition-all duration-300 ease-in-out",
           isOpen && "flex justify-start gap-[44px] w-[290px] pl-[21px]"
         )}

@@ -4,17 +4,24 @@ import { checkAuth } from "@/store/features/authSlice.ts";
 import {PATHS} from "@/constants/paths.ts";
 
 const getAuthenticatedUser = async () => {
-  let { user, isCheckedSession } = store.getState().auth;
+  // let { user, isCheckedSession } = store.getState().auth;
+  let { isCheckedSession, isAuthenticated } = store.getState().auth;
+
 
   if (!isCheckedSession) {
     try {
-      const result = await loaderDispatch(checkAuth()).unwrap();
-      user = result.data;
+      // const result = await loaderDispatch(checkAuth()).unwrap();
+      // user = result.data;
+
+      await loaderDispatch(checkAuth()).unwrap();
+
+      // Забираем актуальное состояние из стора после запроса
+      isAuthenticated = store.getState().auth.isAuthenticated;
     } catch {
-      user = null;
+      isAuthenticated = false;
     }
   }
-  return user;
+  return isAuthenticated;
 };
 
 // Фабрика middleware для защиты приватных роутов
@@ -22,9 +29,9 @@ export const requireAuth = (redirectTo: string = PATHS.LOGIN) => {
   // сама функция middleware
   // Request - встроенный тип в браузер
   return async (ctx: { request: Request }, next: () => Promise<any>) => {
-    const user = await getAuthenticatedUser();
+    const isAuthenticated = await getAuthenticatedUser();
 
-    if (!user) {
+    if (!isAuthenticated) {
       // 1. Получаем полный URL, на который шел пользователь (например, http://localhost:5173/todo)
       const url = new URL(ctx.request.url);
 
@@ -43,9 +50,9 @@ export const requireAuth = (redirectTo: string = PATHS.LOGIN) => {
 // Фабрика middleware для гостей
 export const requireGuest = (redirectTo: string = PATHS.SETTINGS) => {
   return async (_: any, next: () => Promise<any>) => {
-    const user = await getAuthenticatedUser();
+    const isAuthenticated = await getAuthenticatedUser();
 
-    if (user) {
+    if (isAuthenticated) {
       return redirect(redirectTo);
     }
 
